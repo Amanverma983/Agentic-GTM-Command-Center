@@ -89,6 +89,19 @@ def list_leads():
     """
     return get_all_leads()
 
+@router.get("/smtp-status")
+def check_smtp_status():
+    """
+    Returns whether Gmail SMTP is configured for email sending.
+    """
+    from app.config import settings
+    configured = bool(settings.smtp_email and settings.smtp_app_password)
+    return {
+        "configured": configured,
+        "smtp_email": settings.smtp_email if configured else None,
+        "message": "Gmail SMTP is ready" if configured else "Add SMTP_EMAIL and SMTP_APP_PASSWORD to backend .env to enable email sending"
+    }
+
 @router.get("/{lead_id}")
 def fetch_lead_details(lead_id: str):
     """
@@ -162,15 +175,3 @@ def send_outreach_email(lead_id: str, request: SendEmailRequest):
     return result
 
 
-@router.get("/smtp-status")
-def check_smtp_status():
-    """
-    Returns whether Gmail SMTP is configured for email sending.
-    """
-    from app.config import settings
-    configured = bool(settings.smtp_email and settings.smtp_app_password)
-    return {
-        "configured": configured,
-        "smtp_email": settings.smtp_email if configured else None,
-        "message": "Gmail SMTP is ready" if configured else "Add SMTP_EMAIL and SMTP_APP_PASSWORD to backend .env to enable email sending"
-    }
