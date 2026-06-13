@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     host: str = os.getenv("HOST", "0.0.0.0")
     port: int = int(os.getenv("PORT", 8000))
     environment: str = os.getenv("ENVIRONMENT", "development")
+    # Gmail SMTP for email sending
+    smtp_email: str = os.getenv("SMTP_EMAIL", "")
+    smtp_app_password: str = os.getenv("SMTP_APP_PASSWORD", "")
 
     class Config:
         env_file = ".env"

@@ -10,6 +10,7 @@ from app.db import (
     update_lead_status
 )
 from app.agents.graph import gtm_workflow
+from app.utils.email_sender import send_cold_email
 
 router = APIRouter()
 
@@ -112,4 +113,64 @@ def fetch_lead_agent_logs(lead_id: str):
         "lead_id": lead_id,
         "status": lead["status"],
         "logs": logs
+    }
+
+
+class SendEmailRequest(BaseModel):
+    to_email: str
+    prospect_name: Optional[str] = None
+
+
+@router.post("/{lead_id}/send-email")
+def send_outreach_email(lead_id: str, request: SendEmailRequest):
+    """
+    Sends the AI-generated cold email for a specific lead to the prospect's email address.
+    Requires SMTP_EMAIL and SMTP_APP_PASSWORD configured in backend .env.
+    """
+    lead = get_lead(lead_id)
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead execution profile not found.")
+
+    outreach = lead.get("outreach")
+    if not outreach:
+        raise HTTPException(
+            status_code=400,
+            detail="Outreach has not been generated yet. Wait for the GTM workflow to complete."
+        )
+
+    subject = outreach.get("cold_email_subject", "Partnership Opportunity")
+    body = outreach.get("cold_email_body", "")
+    company_name = lead.get("company_name", "")
+
+    if not body:
+        raise HTTPException(
+            status_code=400,
+            detail="Cold email body is empty. Ensure the outreach agent ran successfully."
+        )
+
+    result = send_cold_email(
+        to_email=request.to_email,
+        subject=subject,
+        body=body,
+        prospect_name=request.prospect_name,
+        company_name=company_name,
+    )
+
+    if not result["success"]:
+        raise HTTPException(status_code=500, detail=result["error"])
+
+    return result
+
+
+@router.get("/smtp-status")
+def check_smtp_status():
+    """
+    Returns whether Gmail SMTP is configured for email sending.
+    """
+    from app.config import settings
+    configured = bool(settings.smtp_email and settings.smtp_app_password)
+    return {
+        "configured": configured,
+        "smtp_email": settings.smtp_email if configured else None,
+        "message": "Gmail SMTP is ready" if configured else "Add SMTP_EMAIL and SMTP_APP_PASSWORD to backend .env to enable email sending"
     }

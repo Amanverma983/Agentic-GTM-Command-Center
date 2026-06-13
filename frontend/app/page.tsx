@@ -340,7 +340,7 @@ export default function Home() {
                 )}
 
                 {activeTab === "outreach" && (
-                  <OutreachCard data={selectedLead.outreach_data} />
+                  <OutreachCard data={selectedLead.outreach_data} leadId={selectedLeadId} />
                 )}
 
                 {activeTab === "crm" && (
