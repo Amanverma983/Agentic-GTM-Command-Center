@@ -116,7 +116,7 @@ export default function OutreachCard({ data }: OutreachCardProps) {
           <div className="pr-16 space-y-2">
             <span className="text-xs text-slate-500 font-bold uppercase tracking-wider block mb-1">InMail / DM Script</span>
             <p className="text-sm text-slate-300 leading-relaxed bg-slate-950/20 p-3 rounded-lg border border-slate-900 italic">
-              "{data.linkedin_message}"
+              &quot;{data.linkedin_message}&quot;
             </p>
             <span className="text-[10px] text-slate-500 block">Character Count: {data.linkedin_message.length}</span>
           </div>
@@ -126,7 +126,7 @@ export default function OutreachCard({ data }: OutreachCardProps) {
           <div className="pr-16 space-y-2">
             <span className="text-xs text-slate-500 font-bold uppercase tracking-wider block mb-1">30-Second Elevator Pitch</span>
             <p className="text-sm text-slate-300 leading-relaxed bg-violet-950/10 p-4 rounded-lg border border-violet-900/20 font-medium">
-              "{data.sales_pitch}"
+              &quot;{data.sales_pitch}&quot;
             </p>
           </div>
         )}
