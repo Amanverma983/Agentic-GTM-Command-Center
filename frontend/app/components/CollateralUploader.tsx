@@ -4,11 +4,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { UploadCloud, FileText, Trash2, Loader2, BookOpen } from "lucide-react";
 
 interface SalesFile {
-  id: str;
-  filename: str;
-  file_type: str;
+  id: string;
+  filename: string;
+  file_type: string;
   file_size: number;
-  uploaded_at: str;
+  uploaded_at: string;
 }
 
 export default function CollateralUploader() {
