@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: gtm-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - SQLITE_DB_PATH=gtm_center.db
+      - CHROMA_DB_PATH=chroma_db
+      - ENVIRONMENT=production
+    restart: unless-stopped

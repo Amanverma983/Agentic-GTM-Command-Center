@@ -1,0 +1,26 @@
+# Python environment files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.env
+
+# Database and vector DB states
+*.db
+*.db-journal
+chroma_db/
+gtm_center.db
+
+# Node dependencies and build files
+node_modules/
+.next/
+out/
+build/
+dist/
+.DS_Store
+*.log
